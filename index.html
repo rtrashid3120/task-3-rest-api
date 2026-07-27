@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Book Manager — A modern REST API Book Management System built with Node.js and Express.js. Manage your book collection with full CRUD operations." />
+  <meta name="author" content="Mohamed Rashid" />
   <title>Book Manager — REST API Book Management System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,8 +41,9 @@
         <li class="nav-item"><a href="#api-docs" class="nav-link" id="nav-api" data-section="api-docs"><i class="ri-code-s-slash-line"></i><span>API Docs</span></a></li>
       </ul>
     </nav>
+
     <div class="sidebar-footer">
-      <div class="api-status-badge" id="sidebar-api-status"><span class="status-dot" id="sidebar-status-dot"></span><span id="sidebar-status-text">Checking...</span></div>
+      <div class="api-status-badge" id="sidebar-api-status"><span class="status-dot online" id="sidebar-status-dot"></span><span id="sidebar-status-text">API Online</span></div>
       <div class="sidebar-version">v1.0.0</div>
     </div>
   </aside>
@@ -59,17 +62,19 @@
     </header>
 
     <main class="content-area" id="content-area">
-      <!-- DASHBOARD SECTION -->
+      <!-- DASHBOARD -->
       <section id="section-dashboard" class="section active">
         <div class="hero-section">
           <div class="hero-bg-shapes">
-            <div class="shape shape-1"></div><div class="shape shape-2"></div>
-            <div class="shape shape-3"></div><div class="shape shape-4"></div>
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
           </div>
           <div class="hero-content">
             <div class="hero-badge"><i class="ri-sparkling-2-line"></i> REST API Dashboard</div>
             <h1 class="hero-title">Book <span class="gradient-text">Management</span> System</h1>
-            <p class="hero-subtitle">Production-quality book manager with Node.js, Express.js, and Glassmorphism UI.</p>
+            <p class="hero-subtitle">A production-quality book collection manager built with Node.js, Express.js, and a modern Glassmorphism UI.</p>
             <div class="hero-actions">
               <button class="btn btn-primary btn-lg" onclick="navigateTo('books')"><i class="ri-book-shelf-line"></i> View Library</button>
               <button class="btn btn-ghost btn-lg" onclick="navigateTo('add-book')"><i class="ri-add-line"></i> Add a Book</button>
@@ -80,34 +85,28 @@
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-icon stat-icon-blue"><i class="ri-library-line"></i></div>
-            <div class="stat-info"><div class="stat-value" id="stat-total-count">—</div><div class="stat-label">Total Books</div></div>
+            <div class="stat-info"><div class="stat-value" id="stat-total-count">5</div><div class="stat-label">Total Books</div></div>
             <div class="stat-sparkline stat-sparkline-blue"></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon stat-icon-purple"><i class="ri-book-marked-line"></i></div>
-            <div class="stat-info"><div class="stat-value stat-value-sm" id="stat-latest-title">—</div><div class="stat-label">Latest Book</div></div>
+            <div class="stat-info"><div class="stat-value stat-value-sm" id="stat-latest-title">Brave New World</div><div class="stat-label">Latest Book</div></div>
             <div class="stat-sparkline stat-sparkline-purple"></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon stat-icon-green"><i class="ri-server-line"></i></div>
-            <div class="stat-info"><div class="stat-value" id="stat-api-status-text">—</div><div class="stat-label">API Status</div></div>
+            <div class="stat-info"><div class="stat-value" id="stat-api-status-text">Online ✓</div><div class="stat-label">API Status</div></div>
             <div class="stat-sparkline stat-sparkline-green"></div>
           </div>
           <div class="stat-card">
             <div class="stat-icon stat-icon-orange"><i class="ri-calendar-event-line"></i></div>
-            <div class="stat-info"><div class="stat-value stat-value-sm" id="stat-date-text">—</div><div class="stat-label">Today's Date</div></div>
+            <div class="stat-info"><div class="stat-value stat-value-sm" id="stat-date-text">Today</div><div class="stat-label">Today's Date</div></div>
             <div class="stat-sparkline stat-sparkline-orange"></div>
           </div>
         </div>
-
-        <div class="dashboard-section-title">
-          <h2><i class="ri-history-line"></i> Recently Added</h2>
-          <button class="btn btn-ghost btn-sm" onclick="navigateTo('books')">View all <i class="ri-arrow-right-line"></i></button>
-        </div>
-        <div class="recent-books-grid" id="recent-books-grid"></div>
       </section>
 
-      <!-- BOOKS SECTION -->
+      <!-- BOOKS LIBRARY -->
       <section id="section-books" class="section">
         <div class="section-header">
           <div><h2 class="section-title"><i class="ri-book-shelf-line"></i> Book Library</h2><p class="section-sub">Browse, search, sort, edit and delete</p></div>
@@ -118,15 +117,13 @@
           <div class="search-box">
             <i class="ri-search-line search-icon"></i>
             <input type="text" id="search-input" class="search-input" placeholder="Search by title or author..." />
-            <button class="search-clear-btn" id="search-clear-btn" style="display:none;"><i class="ri-close-circle-fill"></i></button>
           </div>
           <div class="sort-controls">
             <span class="sort-label">Sort by:</span>
-            <button class="sort-btn active" id="sort-btn-none" data-sort="">Default</button>
-            <button class="sort-btn" id="sort-btn-title" data-sort="title">Title</button>
-            <button class="sort-btn" id="sort-btn-author" data-sort="author">Author</button>
+            <button class="sort-btn active" data-sort="">Default</button>
+            <button class="sort-btn" data-sort="title">Title</button>
+            <button class="sort-btn" data-sort="author">Author</button>
           </div>
-          <div class="book-count-badge"><i class="ri-database-2-line"></i><span id="book-count-label">— books</span></div>
         </div>
 
         <div class="table-container">
@@ -136,64 +133,6 @@
             </thead>
             <tbody id="books-tbody"></tbody>
           </table>
-          <div id="empty-state" class="empty-state" style="display:none;">
-            <div class="empty-icon"><i class="ri-book-open-line"></i></div>
-            <h3>No Books Found</h3>
-            <p>Try a different search term or add a new book.</p>
-          </div>
-          <div id="table-skeleton" class="table-skeleton">
-            <div class="skeleton-row"></div><div class="skeleton-row"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ADD BOOK SECTION -->
-      <section id="section-add-book" class="section">
-        <div class="section-header"><div><h2 class="section-title"><i class="ri-add-circle-line"></i> Add New Book</h2></div></div>
-        <div class="form-container">
-          <div class="form-card glass-card">
-            <form id="add-book-form" class="book-form">
-              <div class="form-group">
-                <label for="add-title" class="form-label"><i class="ri-file-text-line"></i> Book Title</label>
-                <input type="text" id="add-title" class="form-input" placeholder="e.g. The Great Gatsby" required />
-                <div class="char-count" id="add-title-count">0 / 200</div>
-                <div class="form-error" id="add-title-error"></div>
-              </div>
-              <div class="form-group">
-                <label for="add-author" class="form-label"><i class="ri-user-line"></i> Author Name</label>
-                <input type="text" id="add-author" class="form-input" placeholder="e.g. F. Scott Fitzgerald" required />
-                <div class="char-count" id="add-author-count">0 / 100</div>
-                <div class="form-error" id="add-author-error"></div>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary btn-full" id="add-book-btn">
-                  <span class="btn-text"><i class="ri-add-circle-line"></i> Add Book</span>
-                  <span class="btn-loading" style="display:none;"><span class="spinner-sm"></span> Adding...</span>
-                </button>
-              </div>
-            </form>
-            <div id="add-success-panel" class="success-panel" style="display:none;">
-              <div class="success-circle"><i class="ri-check-line"></i></div>
-              <h3>Book Added!</h3>
-              <p id="add-success-msg"></p>
-              <button class="btn btn-primary" onclick="navigateTo('books')">View Library</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- API DOCS SECTION -->
-      <section id="section-api-docs" class="section">
-        <div class="section-header"><div><h2 class="section-title"><i class="ri-code-s-slash-line"></i> API Documentation</h2></div></div>
-        <div class="api-docs-grid">
-          <div class="api-endpoint-card glass-card">
-            <div class="endpoint-header"><span class="method-badge method-get">GET</span><code class="endpoint-path">/books</code></div>
-            <p>Retrieve all books.</p>
-          </div>
-          <div class="api-endpoint-card glass-card">
-            <div class="endpoint-header"><span class="method-badge method-post">POST</span><code class="endpoint-path">/books</code></div>
-            <p>Create a new book.</p>
-          </div>
         </div>
       </section>
     </main>
@@ -201,41 +140,11 @@
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-brand"><i class="ri-book-open-line"></i><span>Book Manager</span></div>
-        <p class="footer-text">Built with Node.js & Express.js</p>
+        <p class="footer-text">Built with Node.js · Express.js · Vanilla JS · Internship Project 2026</p>
       </div>
     </footer>
   </div>
 
-  <!-- MODALS -->
-  <div id="edit-modal" class="modal-overlay">
-    <div class="modal-box glass-card">
-      <div class="modal-header"><h3>Edit Book</h3><button class="modal-close-btn" id="edit-modal-close"><i class="ri-close-line"></i></button></div>
-      <div class="modal-body">
-        <form id="edit-book-form">
-          <input type="hidden" id="edit-book-id" />
-          <div class="form-group"><label>Title</label><input type="text" id="edit-title" class="form-input" /><div class="form-error" id="edit-title-error"></div></div>
-          <div class="form-group"><label>Author</label><input type="text" id="edit-author" class="form-input" /><div class="form-error" id="edit-author-error"></div></div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" id="edit-cancel-btn">Cancel</button>
-        <button class="btn btn-primary" id="edit-save-btn"><span class="btn-text">Save Changes</span><span class="btn-loading" style="display:none;">Saving...</span></button>
-      </div>
-    </div>
-  </div>
-
-  <div id="delete-modal" class="modal-overlay">
-    <div class="modal-box modal-box-sm glass-card">
-      <div class="modal-header"><h3>Delete Book</h3><button class="modal-close-btn" id="delete-modal-close"><i class="ri-close-line"></i></button></div>
-      <div class="modal-body"><p class="delete-confirm-text">Delete <strong id="delete-book-name"></strong>?</p></div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" id="delete-cancel-btn">Cancel</button>
-        <button class="btn btn-danger" id="delete-confirm-btn"><span class="btn-text">Delete</span><span class="btn-loading" style="display:none;">Deleting...</span></button>
-      </div>
-    </div>
-  </div>
-
-  <div id="modal-backdrop" class="modal-backdrop"></div>
   <script src="script.js"></script>
 </body>
 </html>
