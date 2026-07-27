@@ -1,8 +1,3 @@
-/**
- * script.js — Book Management System Frontend
- * Author: Mohamed Rashid | Internship Project 2026
- */
-
 'use strict';
 
 const isGitHubPages = window.location.hostname.includes('github.io');
@@ -10,14 +5,16 @@ const API_BASE = window.location.origin;
 const BOOKS_API = `${API_BASE}/books`;
 const STATUS_API = `${API_BASE}/api/status`;
 
+// Pre-seeded books matching user's exact localhost state
 let mockBooks = [
   { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
   { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee' },
   { id: 3, title: '1984', author: 'George Orwell' },
   { id: 4, title: 'The Catcher in the Rye', author: 'J.D. Salinger' },
   { id: 5, title: 'Brave New World', author: 'Aldous Huxley' },
+  { id: 6, title: 'Thoufika', author: 'Rashid' },
 ];
-let mockNextId = 6;
+let mockNextId = 7;
 
 const state = {
   books: [],
@@ -92,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   startClock();
   attachEventListeners();
   await initApp();
-  setTimeout(() => { dom.loadingScreen()?.classList.add('hidden'); }, 1200);
+  setTimeout(() => { dom.loadingScreen()?.classList.add('hidden'); }, 800);
 });
 
 async function initApp() {
@@ -170,7 +167,7 @@ window.navigateTo = navigateTo;
 async function checkApiStatus() {
   if (isGitHubPages) {
     state.apiOnline = false;
-    updateApiStatusUI(false, 'Demo Mode');
+    updateApiStatusUI(false, 'API Offline');
     return;
   }
   try {
@@ -274,7 +271,7 @@ function renderDashboard() {
   if (dom.statTotalCount()) dom.statTotalCount().textContent = state.books.length;
   const latest = state.books[state.books.length - 1];
   if (dom.statLatestTitle()) dom.statLatestTitle().textContent = latest ? latest.title : 'No books yet';
-  if (dom.statApiStatusText()) dom.statApiStatusText().textContent = state.apiOnline ? 'Online ✓' : (isGitHubPages ? 'Demo Mode ✓' : 'Offline ✗');
+  if (dom.statApiStatusText()) dom.statApiStatusText().textContent = state.apiOnline ? 'Online ✓' : 'Offline ✗';
   if (dom.statDateText()) dom.statDateText().textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
   const recentGrid = dom.recentBooksGrid();
@@ -300,7 +297,7 @@ function renderBooksTable() {
   if (!tbody) return;
   const books = state.books;
 
-  if (dom.bookCountLabel()) dom.bookCountLabel().textContent = `${books.length} book${books.length !== 1 ? 's' : ''}`;
+  if (dom.bookCountLabel()) dom.bookCountLabel().textContent = `${books.length} books`;
 
   if (books.length === 0) {
     tbody.innerHTML = '';
