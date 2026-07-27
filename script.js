@@ -4,7 +4,6 @@ const isGitHubPages = window.location.hostname.includes('github.io');
 const API_BASE = window.location.origin;
 const BOOKS_API = `${API_BASE}/books`;
 
-// In-Memory Data Store (Used for GitHub Pages live demo fallback)
 let mockBooks = [
   { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
   { id: 2, title: 'To Kill a Mockingbird', author: 'Harper Lee' },
@@ -21,10 +20,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadBooks();
   setTimeout(() => document.getElementById('loading-screen')?.classList.add('hidden'), 800);
 });
-
-// ─────────────────────────────────────────
-// API Integration Layer (Supports Express & GH Pages Fallback)
-// ─────────────────────────────────────────
 
 async function fetchBooks() {
   if (isGitHubPages) {
@@ -90,10 +85,6 @@ async function deleteBookApi(id) {
   }
   await loadBooks();
 }
-
-// ─────────────────────────────────────────
-// UI Logic & Rendering
-// ─────────────────────────────────────────
 
 async function loadBooks() {
   try {
@@ -185,13 +176,11 @@ function attachEventListeners() {
     document.getElementById('edit-modal').classList.remove('active');
   });
 
-  // Real-time Search
   document.getElementById('search-input')?.addEventListener('input', (e) => {
     state.searchQuery = e.target.value.trim();
     loadBooks();
   });
 
-  // Sort buttons
   document.querySelectorAll('.sort-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
