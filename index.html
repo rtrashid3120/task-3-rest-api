@@ -4,147 +4,642 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Book Manager — A modern REST API Book Management System built with Node.js and Express.js. Manage your book collection with full CRUD operations." />
+  <meta name="keywords" content="book manager, REST API, Node.js, Express, CRUD, book management system" />
   <meta name="author" content="Mohamed Rashid" />
   <title>Book Manager — REST API Book Management System</title>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Icons via CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark-mode" id="app-body">
+
+  <!-- LOADING SCREEN -->
   <div id="loading-screen" class="loading-screen">
     <div class="loading-logo">
-      <div class="loading-icon"><i class="ri-book-open-line"></i></div>
+      <div class="loading-icon">
+        <i class="ri-book-open-line"></i>
+      </div>
       <h2>Book Manager</h2>
-      <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+      <div class="loading-bar">
+        <div class="loading-bar-fill"></div>
+      </div>
       <p class="loading-text">Initializing...</p>
     </div>
   </div>
 
-  <div id="toast-container" class="toast-container"></div>
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
 
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <div class="logo-icon"><i class="ri-book-open-line"></i></div>
-        <div class="logo-text"><span class="logo-title">Book</span><span class="logo-sub">Manager</span></div>
+        <div class="logo-icon">
+          <i class="ri-book-open-line"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Book</span>
+          <span class="logo-sub">Manager</span>
+        </div>
       </div>
-      <button class="sidebar-toggle-btn" id="sidebar-close-btn"><i class="ri-close-line"></i></button>
+      <button class="sidebar-toggle-btn" id="sidebar-close-btn" aria-label="Close sidebar">
+        <i class="ri-close-line"></i>
+      </button>
     </div>
 
-    <nav class="sidebar-nav">
+    <nav class="sidebar-nav" aria-label="Main navigation">
       <ul class="nav-list">
-        <li class="nav-item"><a href="#dashboard" class="nav-link active" id="nav-dashboard" data-section="dashboard"><i class="ri-dashboard-3-line"></i><span>Dashboard</span></a></li>
-        <li class="nav-item"><a href="#books" class="nav-link" id="nav-books" data-section="books"><i class="ri-book-shelf-line"></i><span>Book Library</span></a></li>
-        <li class="nav-item"><a href="#add-book" class="nav-link" id="nav-add" data-section="add-book"><i class="ri-add-circle-line"></i><span>Add Book</span></a></li>
-        <li class="nav-item"><a href="#api-docs" class="nav-link" id="nav-api" data-section="api-docs"><i class="ri-code-s-slash-line"></i><span>API Docs</span></a></li>
+        <li class="nav-item">
+          <a href="#dashboard" class="nav-link active" id="nav-dashboard" data-section="dashboard">
+            <i class="ri-dashboard-3-line"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#books" class="nav-link" id="nav-books" data-section="books">
+            <i class="ri-book-shelf-line"></i>
+            <span>Book Library</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#add-book" class="nav-link" id="nav-add" data-section="add-book">
+            <i class="ri-add-circle-line"></i>
+            <span>Add Book</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#api-docs" class="nav-link" id="nav-api" data-section="api-docs">
+            <i class="ri-code-s-slash-line"></i>
+            <span>API Docs</span>
+          </a>
+        </li>
       </ul>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="api-status-badge" id="sidebar-api-status"><span class="status-dot online" id="sidebar-status-dot"></span><span id="sidebar-status-text">API Online</span></div>
+      <div class="api-status-badge" id="sidebar-api-status">
+        <span class="status-dot" id="sidebar-status-dot"></span>
+        <span id="sidebar-status-text">Checking...</span>
+      </div>
       <div class="sidebar-version">v1.0.0</div>
     </div>
   </aside>
 
+  <!-- MAIN LAYOUT -->
   <div class="main-wrapper" id="main-wrapper">
-    <header class="topbar">
+
+    <!-- TOP NAV BAR -->
+    <header class="topbar" role="banner">
       <div class="topbar-left">
-        <button class="menu-toggle-btn" id="menu-toggle-btn"><i class="ri-menu-2-line"></i></button>
-        <div class="breadcrumb" id="breadcrumb"><i class="ri-home-5-line"></i><span class="breadcrumb-sep">/</span><span id="breadcrumb-current">Dashboard</span></div>
+        <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Toggle sidebar">
+          <i class="ri-menu-2-line"></i>
+        </button>
+        <div class="breadcrumb" id="breadcrumb" aria-label="breadcrumb">
+          <i class="ri-home-5-line"></i>
+          <span class="breadcrumb-sep">/</span>
+          <span id="breadcrumb-current">Dashboard</span>
+        </div>
       </div>
       <div class="topbar-right">
-        <div class="topbar-clock" id="topbar-clock"></div>
-        <button class="theme-toggle-btn" id="theme-toggle-btn"><i class="ri-sun-line" id="theme-icon"></i></button>
-        <div class="topbar-avatar"><i class="ri-user-3-line"></i></div>
+        <div class="topbar-clock" id="topbar-clock" aria-label="Current time"></div>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle dark/light mode">
+          <i class="ri-sun-line" id="theme-icon"></i>
+        </button>
+        <div class="topbar-avatar" aria-label="User avatar">
+          <i class="ri-user-3-line"></i>
+        </div>
       </div>
     </header>
 
-    <main class="content-area" id="content-area">
-      <!-- DASHBOARD -->
-      <section id="section-dashboard" class="section active">
+    <!-- MAIN CONTENT -->
+    <main class="content-area" id="content-area" role="main">
+
+      <!-- SECTION: DASHBOARD -->
+      <section id="section-dashboard" class="section active" aria-label="Dashboard">
+
+        <!-- Hero -->
         <div class="hero-section">
-          <div class="hero-bg-shapes">
+          <div class="hero-bg-shapes" aria-hidden="true">
             <div class="shape shape-1"></div>
             <div class="shape shape-2"></div>
             <div class="shape shape-3"></div>
             <div class="shape shape-4"></div>
           </div>
           <div class="hero-content">
-            <div class="hero-badge"><i class="ri-sparkling-2-line"></i> REST API Dashboard</div>
+            <div class="hero-badge">
+              <i class="ri-sparkling-2-line"></i>
+              REST API Dashboard
+            </div>
             <h1 class="hero-title">Book <span class="gradient-text">Management</span> System</h1>
-            <p class="hero-subtitle">A production-quality book collection manager built with Node.js, Express.js, and a modern Glassmorphism UI.</p>
+            <p class="hero-subtitle">
+              A production-quality book collection manager built with Node.js, Express.js,
+              and a modern Glassmorphism UI. Manage your library with full CRUD operations.
+            </p>
             <div class="hero-actions">
-              <button class="btn btn-primary btn-lg" onclick="navigateTo('books')"><i class="ri-book-shelf-line"></i> View Library</button>
-              <button class="btn btn-ghost btn-lg" onclick="navigateTo('add-book')"><i class="ri-add-line"></i> Add a Book</button>
+              <button class="btn btn-primary btn-lg" onclick="navigateTo('books')" id="hero-view-books-btn">
+                <i class="ri-book-shelf-line"></i>
+                View Library
+              </button>
+              <button class="btn btn-ghost btn-lg" onclick="navigateTo('add-book')" id="hero-add-book-btn">
+                <i class="ri-add-line"></i>
+                Add a Book
+              </button>
             </div>
           </div>
         </div>
 
+        <!-- Stat Cards -->
         <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-blue"><i class="ri-library-line"></i></div>
-            <div class="stat-info"><div class="stat-value" id="stat-total-count">5</div><div class="stat-label">Total Books</div></div>
+          <div class="stat-card" id="stat-total">
+            <div class="stat-icon stat-icon-blue">
+              <i class="ri-library-line"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-total-count">—</div>
+              <div class="stat-label">Total Books</div>
+            </div>
             <div class="stat-sparkline stat-sparkline-blue"></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-purple"><i class="ri-book-marked-line"></i></div>
-            <div class="stat-info"><div class="stat-value stat-value-sm" id="stat-latest-title">Brave New World</div><div class="stat-label">Latest Book</div></div>
+          <div class="stat-card" id="stat-latest">
+            <div class="stat-icon stat-icon-purple">
+              <i class="ri-book-marked-line"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value stat-value-sm" id="stat-latest-title">—</div>
+              <div class="stat-label">Latest Book</div>
+            </div>
             <div class="stat-sparkline stat-sparkline-purple"></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-green"><i class="ri-server-line"></i></div>
-            <div class="stat-info"><div class="stat-value" id="stat-api-status-text">Online ✓</div><div class="stat-label">API Status</div></div>
+          <div class="stat-card" id="stat-api">
+            <div class="stat-icon stat-icon-green">
+              <i class="ri-server-line"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-api-status-text">—</div>
+              <div class="stat-label">API Status</div>
+            </div>
             <div class="stat-sparkline stat-sparkline-green"></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon stat-icon-orange"><i class="ri-calendar-event-line"></i></div>
-            <div class="stat-info"><div class="stat-value stat-value-sm" id="stat-date-text">Today</div><div class="stat-label">Today's Date</div></div>
+          <div class="stat-card" id="stat-date">
+            <div class="stat-icon stat-icon-orange">
+              <i class="ri-calendar-event-line"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value stat-value-sm" id="stat-date-text">—</div>
+              <div class="stat-label">Today's Date</div>
+            </div>
             <div class="stat-sparkline stat-sparkline-orange"></div>
           </div>
         </div>
-      </section>
 
-      <!-- BOOKS LIBRARY -->
-      <section id="section-books" class="section">
-        <div class="section-header">
-          <div><h2 class="section-title"><i class="ri-book-shelf-line"></i> Book Library</h2><p class="section-sub">Browse, search, sort, edit and delete</p></div>
-          <button class="btn btn-primary" onclick="navigateTo('add-book')"><i class="ri-add-line"></i> Add Book</button>
+        <!-- Recent Books -->
+        <div class="dashboard-section-title">
+          <h2><i class="ri-history-line"></i> Recently Added</h2>
+          <button class="btn btn-ghost btn-sm" onclick="navigateTo('books')" id="dashboard-view-all-btn">View all <i class="ri-arrow-right-line"></i></button>
+        </div>
+        <div class="recent-books-grid" id="recent-books-grid">
+          <!-- JS rendered -->
         </div>
 
+      </section>
+
+      <!-- SECTION: BOOKS -->
+      <section id="section-books" class="section" aria-label="Book Library">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title"><i class="ri-book-shelf-line"></i> Book Library</h2>
+            <p class="section-sub">Browse, search, sort, edit and delete your collection</p>
+          </div>
+          <button class="btn btn-primary" onclick="navigateTo('add-book')" id="books-add-btn">
+            <i class="ri-add-line"></i> Add Book
+          </button>
+        </div>
+
+        <!-- Search + Sort bar -->
         <div class="table-toolbar">
           <div class="search-box">
             <i class="ri-search-line search-icon"></i>
-            <input type="text" id="search-input" class="search-input" placeholder="Search by title or author..." />
+            <input
+              type="text"
+              id="search-input"
+              class="search-input"
+              placeholder="Search by title or author..."
+              autocomplete="off"
+              aria-label="Search books"
+            />
+            <button class="search-clear-btn" id="search-clear-btn" aria-label="Clear search" style="display:none;">
+              <i class="ri-close-circle-fill"></i>
+            </button>
           </div>
           <div class="sort-controls">
             <span class="sort-label">Sort by:</span>
-            <button class="sort-btn active" data-sort="">Default</button>
-            <button class="sort-btn" data-sort="title">Title</button>
-            <button class="sort-btn" data-sort="author">Author</button>
+            <button class="sort-btn active" id="sort-btn-none" data-sort="" aria-pressed="true">Default</button>
+            <button class="sort-btn" id="sort-btn-title" data-sort="title" aria-pressed="false">Title</button>
+            <button class="sort-btn" id="sort-btn-author" data-sort="author" aria-pressed="false">Author</button>
+          </div>
+          <div class="book-count-badge">
+            <i class="ri-database-2-line"></i>
+            <span id="book-count-label">— books</span>
           </div>
         </div>
 
+        <!-- Table -->
         <div class="table-container">
-          <table class="books-table" id="books-table">
+          <table class="books-table" id="books-table" aria-label="Books table">
             <thead>
-              <tr><th>#</th><th>ID</th><th>Title</th><th>Author</th><th>Actions</th></tr>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Author</th>
+                <th scope="col">Actions</th>
+              </tr>
             </thead>
-            <tbody id="books-tbody"></tbody>
+            <tbody id="books-tbody">
+              <!-- Rendered by JS -->
+            </tbody>
           </table>
+          <!-- Empty State -->
+          <div id="empty-state" class="empty-state" style="display:none;" role="status">
+            <div class="empty-icon"><i class="ri-book-open-line"></i></div>
+            <h3>No Books Found</h3>
+            <p>Try a different search term or add a new book to get started.</p>
+            <button class="btn btn-primary" onclick="navigateTo('add-book')" id="empty-add-btn">
+              <i class="ri-add-line"></i> Add Your First Book
+            </button>
+          </div>
+          <!-- Skeleton Loader -->
+          <div id="table-skeleton" class="table-skeleton" aria-busy="true" aria-label="Loading books">
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+          </div>
         </div>
       </section>
+
+      <!-- SECTION: ADD BOOK -->
+      <section id="section-add-book" class="section" aria-label="Add Book">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title"><i class="ri-add-circle-line"></i> Add New Book</h2>
+            <p class="section-sub">Fill in the details to add a book to your collection</p>
+          </div>
+        </div>
+
+        <div class="form-container">
+          <div class="form-card glass-card">
+            <div class="form-card-header">
+              <div class="form-icon-wrap">
+                <i class="ri-book-2-line"></i>
+              </div>
+              <div>
+                <h3>Book Details</h3>
+                <p>All fields are required</p>
+              </div>
+            </div>
+
+            <form id="add-book-form" class="book-form" novalidate>
+              <div class="form-group">
+                <label for="add-title" class="form-label">
+                  <i class="ri-file-text-line"></i> Book Title
+                </label>
+                <input
+                  type="text"
+                  id="add-title"
+                  name="title"
+                  class="form-input"
+                  placeholder="e.g. The Great Gatsby"
+                  autocomplete="off"
+                  maxlength="200"
+                  required
+                  aria-required="true"
+                  aria-describedby="add-title-error"
+                />
+                <div class="char-count" id="add-title-count">0 / 200</div>
+                <div class="form-error" id="add-title-error" role="alert" aria-live="polite"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="add-author" class="form-label">
+                  <i class="ri-user-line"></i> Author Name
+                </label>
+                <input
+                  type="text"
+                  id="add-author"
+                  name="author"
+                  class="form-input"
+                  placeholder="e.g. F. Scott Fitzgerald"
+                  autocomplete="off"
+                  maxlength="100"
+                  required
+                  aria-required="true"
+                  aria-describedby="add-author-error"
+                />
+                <div class="char-count" id="add-author-count">0 / 100</div>
+                <div class="form-error" id="add-author-error" role="alert" aria-live="polite"></div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-full" id="add-book-btn">
+                  <span class="btn-text">
+                    <i class="ri-add-circle-line"></i> Add Book
+                  </span>
+                  <span class="btn-loading" style="display:none;">
+                    <span class="spinner-sm"></span> Adding...
+                  </span>
+                </button>
+                <button type="button" class="btn btn-ghost btn-full" id="clear-form-btn">
+                  <i class="ri-refresh-line"></i> Clear Form
+                </button>
+              </div>
+            </form>
+
+            <!-- Success Animation Panel -->
+            <div id="add-success-panel" class="success-panel" style="display:none;" aria-live="polite">
+              <div class="success-animation">
+                <div class="success-circle">
+                  <i class="ri-check-line"></i>
+                </div>
+              </div>
+              <h3>Book Added!</h3>
+              <p id="add-success-msg"></p>
+              <div class="success-actions">
+                <button class="btn btn-primary" onclick="navigateTo('books')" id="success-view-btn">
+                  <i class="ri-book-shelf-line"></i> View Library
+                </button>
+                <button class="btn btn-ghost" id="success-add-another-btn">
+                  <i class="ri-add-line"></i> Add Another
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tip card -->
+          <div class="tip-card glass-card">
+            <h4><i class="ri-lightbulb-line"></i> Tips</h4>
+            <ul>
+              <li>Title can be up to 200 characters</li>
+              <li>Author name can be up to 100 characters</li>
+              <li>IDs are auto-generated</li>
+              <li>All fields are required</li>
+            </ul>
+
+            <h4 class="mt-1"><i class="ri-code-s-slash-line"></i> API Equivalent</h4>
+            <div class="code-block">
+              <code id="api-preview-code">POST /books<br>Content-Type: application/json<br><br>{<br>&nbsp;&nbsp;"title": "...",<br>&nbsp;&nbsp;"author": "..."<br>}</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: API DOCS -->
+      <section id="section-api-docs" class="section" aria-label="API Documentation">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title"><i class="ri-code-s-slash-line"></i> API Documentation</h2>
+            <p class="section-sub">Full reference for all REST API endpoints</p>
+          </div>
+          <div class="api-base-url glass-card-sm">
+            <span class="label">Base URL</span>
+            <code id="api-base-url-text">http://localhost:3000</code>
+          </div>
+        </div>
+
+        <div class="api-docs-grid">
+
+          <!-- GET /books -->
+          <div class="api-endpoint-card glass-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-get">GET</span>
+              <code class="endpoint-path">/books</code>
+              <span class="endpoint-desc">Get All Books</span>
+            </div>
+            <div class="endpoint-body">
+              <p>Returns all books in the collection. Supports search and sort query parameters.</p>
+              <div class="endpoint-params">
+                <div class="param-row"><code>?search=</code><span>Filter by title or author</span></div>
+                <div class="param-row"><code>?sort=title</code><span>Sort by title A–Z</span></div>
+                <div class="param-row"><code>?sort=author</code><span>Sort by author A–Z</span></div>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Response 200</div>
+                <code>{ "success": true, "count": 5, "data": [...] }</code>
+              </div>
+              <button class="btn btn-ghost btn-sm try-it-btn" data-method="GET" data-url="/books" id="try-get-all-btn">
+                <i class="ri-play-circle-line"></i> Try it
+              </button>
+            </div>
+          </div>
+
+          <!-- GET /books/:id -->
+          <div class="api-endpoint-card glass-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-get">GET</span>
+              <code class="endpoint-path">/books/:id</code>
+              <span class="endpoint-desc">Get Book by ID</span>
+            </div>
+            <div class="endpoint-body">
+              <p>Returns a single book identified by its numeric ID.</p>
+              <div class="code-block">
+                <div class="code-label">Response 200</div>
+                <code>{ "success": true, "data": { "id": 1, "title": "...", "author": "..." } }</code>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Response 404</div>
+                <code>{ "success": false, "message": "Book with ID 99 not found." }</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /books -->
+          <div class="api-endpoint-card glass-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-post">POST</span>
+              <code class="endpoint-path">/books</code>
+              <span class="endpoint-desc">Create a Book</span>
+            </div>
+            <div class="endpoint-body">
+              <p>Creates a new book. ID is auto-generated.</p>
+              <div class="code-block">
+                <div class="code-label">Request Body</div>
+                <code>{ "title": "1984", "author": "George Orwell" }</code>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Response 201</div>
+                <code>{ "success": true, "message": "Book created successfully.", "data": {...} }</code>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Response 400</div>
+                <code>{ "success": false, "message": "Validation failed", "errors": [...] }</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- PUT /books/:id -->
+          <div class="api-endpoint-card glass-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-put">PUT</span>
+              <code class="endpoint-path">/books/:id</code>
+              <span class="endpoint-desc">Update a Book</span>
+            </div>
+            <div class="endpoint-body">
+              <p>Updates an existing book. Provide at least one field.</p>
+              <div class="code-block">
+                <div class="code-label">Request Body</div>
+                <code>{ "title": "New Title", "author": "New Author" }</code>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Response 200</div>
+                <code>{ "success": true, "message": "Book updated successfully.", "data": {...} }</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- DELETE /books/:id -->
+          <div class="api-endpoint-card glass-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-delete">DELETE</span>
+              <code class="endpoint-path">/books/:id</code>
+              <span class="endpoint-desc">Delete a Book</span>
+            </div>
+            <div class="endpoint-body">
+              <p>Permanently removes a book from the collection.</p>
+              <div class="code-block">
+                <div class="code-label">Response 200</div>
+                <code>{ "success": true, "message": "Book deleted successfully.", "data": {...} }</code>
+              </div>
+              <div class="code-block">
+                <div class="code-label">Response 404</div>
+                <code>{ "success": false, "message": "Book with ID 99 not found." }</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Codes -->
+          <div class="api-endpoint-card glass-card">
+            <div class="endpoint-header">
+              <span class="method-badge method-info">INFO</span>
+              <code class="endpoint-path">Status Codes</code>
+              <span class="endpoint-desc">HTTP Response Codes</span>
+            </div>
+            <div class="endpoint-body">
+              <div class="status-codes-grid">
+                <div class="status-code-item"><span class="code-200">200</span><span>OK — Request successful</span></div>
+                <div class="status-code-item"><span class="code-201">201</span><span>Created — Resource created</span></div>
+                <div class="status-code-item"><span class="code-400">400</span><span>Bad Request — Validation error</span></div>
+                <div class="status-code-item"><span class="code-404">404</span><span>Not Found — Resource missing</span></div>
+                <div class="status-code-item"><span class="code-500">500</span><span>Server Error — Internal error</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </main>
 
-    <footer class="footer">
+    <!-- FOOTER -->
+    <footer class="footer" role="contentinfo">
       <div class="footer-content">
-        <div class="footer-brand"><i class="ri-book-open-line"></i><span>Book Manager</span></div>
+        <div class="footer-brand">
+          <i class="ri-book-open-line"></i>
+          <span>Book Manager</span>
+        </div>
         <p class="footer-text">Built with Node.js · Express.js · Vanilla JS · Internship Project 2026</p>
+        <div class="footer-links">
+          <a href="#dashboard" onclick="navigateTo('dashboard')">Dashboard</a>
+          <a href="#books" onclick="navigateTo('books')">Library</a>
+          <a href="#api-docs" onclick="navigateTo('api-docs')">API Docs</a>
+        </div>
       </div>
     </footer>
+
   </div>
 
+  <!-- MODAL: EDIT BOOK -->
+  <div id="edit-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title" aria-hidden="true">
+    <div class="modal-box glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="edit-modal-title">
+          <i class="ri-edit-box-line"></i> Edit Book
+        </h3>
+        <button class="modal-close-btn" id="edit-modal-close" aria-label="Close modal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-book-form" novalidate>
+          <input type="hidden" id="edit-book-id" />
+          <div class="form-group">
+            <label for="edit-title" class="form-label">
+              <i class="ri-file-text-line"></i> Book Title
+            </label>
+            <input type="text" id="edit-title" class="form-input" placeholder="Book title" maxlength="200" required aria-required="true" aria-describedby="edit-title-error" />
+            <div class="form-error" id="edit-title-error" role="alert" aria-live="polite"></div>
+          </div>
+          <div class="form-group">
+            <label for="edit-author" class="form-label">
+              <i class="ri-user-line"></i> Author Name
+            </label>
+            <input type="text" id="edit-author" class="form-input" placeholder="Author name" maxlength="100" required aria-required="true" aria-describedby="edit-author-error" />
+            <div class="form-error" id="edit-author-error" role="alert" aria-live="polite"></div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="edit-cancel-btn">Cancel</button>
+        <button class="btn btn-primary" id="edit-save-btn">
+          <span class="btn-text"><i class="ri-save-line"></i> Save Changes</span>
+          <span class="btn-loading" style="display:none;"><span class="spinner-sm"></span> Saving...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DELETE CONFIRM -->
+  <div id="delete-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title" aria-hidden="true">
+    <div class="modal-box modal-box-sm glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title danger-title" id="delete-modal-title">
+          <i class="ri-delete-bin-6-line"></i> Delete Book
+        </h3>
+        <button class="modal-close-btn" id="delete-modal-close" aria-label="Close modal">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="delete-warning-icon" aria-hidden="true">
+          <i class="ri-alert-line"></i>
+        </div>
+        <p class="delete-confirm-text">
+          Are you sure you want to delete<br>
+          <strong id="delete-book-name">"Book Title"</strong>?
+        </p>
+        <p class="delete-warning-text">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="delete-cancel-btn">Cancel</button>
+        <button class="btn btn-danger" id="delete-confirm-btn">
+          <span class="btn-text"><i class="ri-delete-bin-6-line"></i> Delete</span>
+          <span class="btn-loading" style="display:none;"><span class="spinner-sm"></span> Deleting...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL BACKDROP -->
+  <div id="modal-backdrop" class="modal-backdrop" aria-hidden="true"></div>
+
+  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>
